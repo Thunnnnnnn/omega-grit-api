@@ -1,0 +1,53 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        Int     @id @default(autoincrement())
+    email     String  @unique
+    firstname String
+    lastname  String
+    password  String
+    phone     String 
+    queues    Queue[]
+}
+
+model Queue {
+    id             Int          @id @default(autoincrement())
+    name           String
+    userId         Int
+    user           User         @relation(fields: [userId], references: [id])
+    typeOfQueueId  Int
+    typeOfQueue    TypeOfQueue  @relation(fields: [typeOfQueueId], references: [id])
+    typeOfAnimalId Int
+    typeOfAnimal   TypeOfAnimal @relation(fields: [typeOfAnimalId], references: [id])
+    meetTime       DateTime
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
+}
+
+model TypeOfQueue {
+    id             Int             @id @default(autoincrement())
+    name           String
+    queues         Queue[]
+    runningNumbers RunningNumber[]
+}
+
+model TypeOfAnimal {
+    id     Int     @id @default(autoincrement())
+    name   String
+    queues Queue[]
+}
+
+model RunningNumber {
+    id            Int         @id @default(autoincrement())
+    number        Int
+    typeOfQueueId Int
+    typeOfQueue   TypeOfQueue @relation(fields: [typeOfQueueId], references: [id])
+    createdAt     DateTime    @default(now())
+}
