@@ -1,99 +1,194 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📌 Project Overview
+ระบบสำหรับจองคิวอาบน้ำและตัดขนสัตว์
+ผู้ใช้สามารถสมัครสมาชิก, เข้าสู่ระบบ, และจองคิวได้
 
 ## Project setup
 
-```bash
-$ npm install
+ติดตั้งแพคเกจของโปรเจคนี้
+
+```
+npm install
 ```
 
-## Compile and run the project
+### Setup .env
 
-```bash
+สร้างไฟล์ .env ใน root ของโปรเจค และกำหนดค่า:
+
+```
+PORT=
+DATABASE_URL=
+JWT_SECRET=
+```
+
+### Init database สำหรับโปรเจคนี้
+
+```
+docker-compose up -d
+```
+
+
+
+### รันโปรแกรมในโหมด Development:
+
+```
 # development
 $ npm run start
 
 # watch mode
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Run tests
+Base URL -> [http://localhost:8080/api](http://localhost:8080/api) 
 
-```bash
-# unit tests
-$ npm run test
+สามารถทดสอบได้ผ่าน Postman ได้
 
-# e2e tests
-$ npm run test:e2e
+## Route Path
 
-# test coverage
-$ npm run test:cov
+#### Authentication
+
+[POST]`/auth/login` -> api นี้สำหรับ login เข้าสู่ระบบ โดยจะต้องสร้าง account ขึ้นมาก่อน
+
+```
+JSON
+{
+  "email": "test@mail.com",
+  "password": "123456"
+}
 ```
 
-## Deployment
+#### User
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+[GET]`/user` -> api นี้สำหรับการขอข้อมูล user ทั้งหมดในระบบ
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+[GET]`/user/:id` -> api นี้สำหรับการขอข้อมูล user โดยใช้ id ของ user ในการขอข้อมูล
 
-```bash
-$ npm install -g mau
-$ mau deploy
+[POST]`/user` -> api นี้สำหรับการสร้างข้อมูล user โดยจะใช้ email (string, email format), password (string, min legnth (6)), firstname (string), lastname (string) และ phone (string, min length(10))
+
+```
+JSON
+{
+  "email": "test@mail.com",
+  "password": "123456",
+  "firstname": "John",
+  "lastname": "Doe",
+  "phone": "0911111111"
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+[PUT]`/user/:id` -> api นี้สำหรับการอัพเดทข้อมูล user โดยใช้ id ของ user เพื่ออัพเดทข้อมูล email (string, email format), firstname (string), lastname (string), phone (string)
 
-## Resources
+```
+JSON
+{
+  "email": "test@mail.com",
+  "firstname": "John",
+  "lastname": "Doe",
+  "phone": "0911111111"
+}
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+[DELETE]`/user/:id` -> api นี้สำหรับลบข้อมูล user โดยใช้ id ของ user ในการลบข้อมูล user และต้องใช้รหัสผ่านในการยืนยันการลบบัญชี
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+[POST]`/user/:id/change-password` -> api นี้สำหรับการเปลี่ยนรหัส user โดยจะใช้ currentPassword (string) และ newPassword (string, min length (6))
 
-## Support
+```
+JSON
+{
+  "currentPassword": "123456",
+  "newPassword": "123456"
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### Queue
 
-## Stay in touch
+[GET]`/queue` -> api นี้สำหรับการขอข้อมูลการจองคิวทั้งหมดในระบบ
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+[GET]`/queue/:id` -> api นี้สำหรับการขอข้อมูลการจองคิว โดยใช้ id ของคิว
 
-## License
+[POST]`/queue` -> api นี้สำหรับการสร้างข้อมูลการจองคิว โดยใช้ userId (integer), typeOfAnimalId (integer), typeOfQueueId (integer) และ meetTime (string, ISO 8601 datetime)
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```
+JSON
+{
+  "userId": 1,
+  "typeOfAnimalId": 2,
+  "typeOfQueueId": 1,
+  "meetTime": "2026-04-18T10:00:00Z"
+}
+```
+
+[PUT]`/queue/:id` -> api นี้สำหรับการอัพเดทข้อมูลการจองคิว โดยใช้ id ของคิวเพื่ออัพเดทข้อมูล typeOfAnimalId (integer), typeOfQueueId (integer) และ meetTime (string, ISO 8601 datetime)
+
+```
+JSON
+{
+  "typeOfAnimalId": 2,
+  "typeOfQueueId": 1,
+  "meetTime": "2026-04-18T10:00:00Z"
+}
+```
+
+[DELETE]`/queue/:id` -> api นี้สำหรับการลบข้อมูลการจองคิว โดยใช้ id ของคิว
+
+[GET]`/queue/user/:userId` -> api นี้สำหรับการขอข้อมูลการจองคิวทั้งหมดของ user คนนั้น
+
+[GET]`/queue/date` -> api นี้สำหรับการขอข้อมูลคิวทั้งหมดของวัน โดยใช้ date (string, ISO 8601 date)
+
+```
+JSON
+{
+  "date": "2026-04-20"
+}
+```
+
+#### Type of animal (Master data)
+
+[GET]`/type-of-animal` -> api นี้สำหรับการขอข้อมูลประเภทของสัตว์ทั้งหมดในระบบ
+
+[GET]`/type-of-animal/:id` -> api นี้สำหรับการขอข้อมูลประเภทของสัตว์ โดยใช้ id ของประเภทของสัตว์
+
+[POST]`/type-of-animal` -> api นี้สำหรับการสร้างข้อมูลประเภทของสัตว์ โดยใช้ name (string)
+
+```
+JSON
+{
+  "name": "Cat"
+}
+```
+
+[PUT]`/type-of-animal/:id` -> api นี้สำหรับการอัพเดทข้อมูลประเภทของสัตว์ โดยใช้ id ของประเภทของสัตว์เพื่ออัพเดทข้อมูล name(string)
+
+```
+JSON
+{
+  "name": "Cat"
+}
+```
+
+[DELETE]`/type-of-animal/:id` -> api นี้สำหรับการลบข้อมูลประเภทของสัตว์ โดยใช้ id ของประเภทของสัตว์
+
+#### Type of queue (Master data)
+
+[GET]`/type-of-queue` -> api นี้สำหรับการขอข้อมูลประเภทของการจองคิวทั้งหมดในระบบ
+
+[GET]`/type-of-queue/:id` -> api นี้สำหรับการขอข้อมูลประเภทของการจองคิว โดยใช้ id ของประเภทของการจองคิว
+
+[POST]`/type-of-queue` -> api นี้สำหรับการสร้างข้อมูลประเภทของการจองคิว โดยใช้ name (string)
+
+```
+JSON
+{
+  "name": "Bathing animal"
+}
+```
+
+[PUT]`/type-of-queue/:id` -> api นี้สำหรับการอัพเดทข้อมูลประเภทของการจองคิว โดยใช้ id ของประเภทของการจองคิวเพื่ออัพเดทข้อมูล name(string)
+
+```
+JSON
+{
+  "name": "Bathing animal"
+}
+```
+
+[DELETE]`/type-of-queue/:id` -> api นี้สำหรับการลบข้อมูลประเภทของการจองคิว โดยใช้ id ของประเภทของการจองคิว
